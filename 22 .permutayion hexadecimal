@@ -1,39 +1,53 @@
-#include <stdio.h>
-#include <stdint.h>
-void initialPermutation(uint64_t *data) {
-}
-void finalPermutation(uint64_t *data) {
-}
+#include<stdio.h>
+int main()
+{
+ int i, cnt=0, p8[8]={6,7,8,9,1,2,3,4};
+ int p10[10]={6,7,8,9,10,1,2,3,4,5};
+ 
+ char input[11], k1[10], k2[10], temp[11];
+ char LS1[5], LS2[5];
+ printf("Enter 10 bits input:");
+ scanf("%s",input); 
+ input[10]='\0';
 
-void generateSubkeys(uint64_t *key, uint64_t subkeys[16]) {
+ for(i=0; i<10; i++)
+ {
+  cnt = p10[i];
+  temp[i] = input[cnt-1];
+ }
+ temp[i]='\0';
+ printf("\nYour p10 key is    :");
+ for(i=0; i<10; i++)
+ { printf("%d,",p10[i]); }
+ 
+ printf("\nBits after p10     :");
+ puts(temp);
+ for(i=0; i<5; i++)
+ {
+  if(i==4)
+   temp[i]=temp[0];
+  else
+   temp[i]=temp[i+1];   
+ }
+
+ for(i=5; i<10; i++)
+ {
+  if(i==9)
+   temp[i]=temp[5];
+  else
+   temp[i]=temp[i+1];   
+ }
+ printf("Output after LS-1  :");
+ puts(temp);
+ 
+ printf("\nYour p8 key is     :");
+ for(i=0; i<8; i++)
+ { printf("%d,",p8[i]); }
+ for(i=0; i<8; i++)
+ {
+  cnt = p8[i];
+  k1[i] = temp[cnt-1];
+ }
+ printf("\nYour key k1 is     :");
+ puts(k1); 
 }
-void feistelNetwork(uint32_t *left, uint32_t *right, uint64_t subkey) {
-}
-void desEncrypt(uint64_t plaintext, uint64_t key, uint64_t *ciphertext) {
-    uint64_t subkeys[16];
-    generateSubkeys(&key, subkeys);
-    initialPermutation(&plaintext);
-    uint32_t left = (uint32_t)(plaintext >> 32);
-    uint32_t right = (uint32_t)(plaintext & 0xFFFFFFFF);
-    for (int round = 0; round < 16; round++) {
-        feistelNetwork(&left, &right, subkeys[round]);
-    }
-    *ciphertext = ((uint64_t)right << 32) | (uint64_t)left;   
-    finalPermutation(ciphertext);
-}
-int main() {
-    uint64_t plaintext, key, ciphertext;
-    printf("Enter 64-bit plaintext (in hexadecimal): ");
-    scanf("%llx", &plaintext);
-    printf("Enter 64-bit key (in hexadecimal): ");
-    scanf("%llx", &key);
-    desEncrypt(plaintext, key, &ciphertext);
-    printf("Plaintext: 0x%016llX\n", plaintext);
-    printf("Ciphertext: 0x%016llX\n", ciphertext);   
-    return 0;
-}
-outpiut :
-Enter 64-bit plaintext (in hexadecimal): 58456789076
-Enter 64-bit key (in hexadecimal): 65345678
-Plaintext: 0x0000058456789076
-Ciphertext: 0x5678907600000584
